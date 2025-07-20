@@ -1,5 +1,20 @@
-.root {
-  width: 50%;
-  height: 50%;
+.container {
+  position: relative;
+  inline-size: 50%;
+  block-size: 50%;
+}
+
+.video {
   object-fit: cover;
+  inline-size: 100%;
+  block-size: 100%;
+  transform: scaleX(-1);
+}
+
+.canvas {
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block-start: 0;
+  inline-size: 100%;
+  block-size: 100%;
 }

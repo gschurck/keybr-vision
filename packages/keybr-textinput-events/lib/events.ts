@@ -42,6 +42,10 @@ async function detect() {
     const end = Date.now();
     console.log(`Hand detection took ${end - start}ms`);
 
+    if (webcam.onHandsDetected) {
+      webcam.onHandsDetected(hands);
+    }
+
     if (hands.length > 0) {
       console.log("Detected hands:", hands);
     }

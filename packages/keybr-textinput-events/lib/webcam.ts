@@ -1,3 +1,5 @@
+import { type Hand } from "@tensorflow-models/hand-pose-detection";
+
 /**
  * A simple state holder for the webcam video element.
  * This is used to share the video element between the React component
@@ -6,4 +8,5 @@
  */
 export const webcam = {
   video: null as HTMLVideoElement | null,
+  onHandsDetected: null as ((hands: Hand[]) => void) | null,
 };
