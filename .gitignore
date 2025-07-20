@@ -24,3 +24,5 @@ sandbox/
 
 # Custom scripts
 deploy.sh
+
+.data

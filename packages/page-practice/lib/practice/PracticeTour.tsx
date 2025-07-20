@@ -1,16 +1,20 @@
 import { KeyLegendList, names } from "@keybr/lesson-ui";
 import { Slide, Tour } from "@keybr/widget";
-import { memo } from "react";
+import { memo, type ReactNode } from "react";
 import { FormattedMessage } from "react-intl";
 import { KeyDetailsChartDemo } from "./KeyDetailsChartDemo.tsx";
+import { WebcamFeed } from "./WebcamFeed.tsx";
 
 export const PracticeTour = memo(function PracticeTour({
   onClose,
 }: {
   readonly onClose?: () => void;
-}) {
+}): ReactNode {
   return (
     <Tour onClose={onClose}>
+      <Slide size="large">
+      <WebcamFeed />
+      </Slide>
       <Slide size="large">
         <FormattedMessage
           id="m_tour01"

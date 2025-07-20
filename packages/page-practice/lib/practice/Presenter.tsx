@@ -17,6 +17,7 @@ import { DeferredKeyboardPresenter } from "./KeyboardPresenter.tsx";
 import { PracticeTour } from "./PracticeTour.tsx";
 import * as styles from "./Presenter.module.less";
 import { type LessonState } from "./state/index.ts";
+import {WebcamFeed} from "./WebcamFeed.tsx";
 
 type Props = {
   readonly state: LessonState;
@@ -119,6 +120,7 @@ export class Presenter extends PureComponent<Props, State> {
                 />
               </Zoomer>
             }
+            // change here tour
             tour={tour && <PracticeTour onClose={handleTourClose} />}
           />
         );
@@ -313,6 +315,8 @@ function NormalLayout({
             lastLesson={state.lastLesson}
           />
         </Zoomer>
+        <WebcamFeed />
+
       </div>
       {controls}
       {tour}
