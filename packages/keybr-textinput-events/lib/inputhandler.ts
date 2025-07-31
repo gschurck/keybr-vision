@@ -107,10 +107,10 @@ export class InputHandler implements Focusable {
       this.#timeToType.add(mapped);
       switch (mapped.type) {
         case "keydown":
-          this.#callbacks.onKeyDown?.(mapped);
+          //this.#callbacks.onKeyDown?.(mapped);
           break;
         case "keyup":
-          this.#callbacks.onKeyUp?.(mapped);
+          //this.#callbacks.onKeyUp?.(mapped);
           break;
       }
     }

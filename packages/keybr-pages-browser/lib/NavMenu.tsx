@@ -27,6 +27,10 @@ export function NavMenu({ currentPath }: { readonly currentPath: string }) {
       </MenuItem>
 
       <MenuItem>
+        <MenuItemLink page={Pages.calibrate} />
+      </MenuItem>
+
+      <MenuItem>
         <MenuItemLink page={Pages.practice} />
       </MenuItem>
 

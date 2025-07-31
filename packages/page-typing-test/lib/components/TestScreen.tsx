@@ -73,14 +73,14 @@ function Controller({
             onKeyDown={session.handleKeyDown}
             onKeyUp={session.handleKeyUp}
             onInput={(event) => {
-              const { feedback, progress, completed } =
-                session.handleInput(event);
-              setLines(session.getLines());
-              setProgress(progress);
-              player(feedback);
-              if (completed) {
-                setView("report", { result: makeResult(session) });
-              }
+              // const { feedback, progress, completed } =
+              //   session.handleInput(event);
+              // setLines(session.getLines());
+              // setProgress(progress);
+              // player(feedback);
+              // if (completed) {
+              //   setView("report", { result: makeResult(session) });
+              // }
             }}
             lineTemplate={LineTemplate}
           />

@@ -6,7 +6,7 @@ import {
   mdiAspectRatio,
   mdiCog,
   mdiHelpCircleOutline,
-  mdiRedo,
+  mdiRedo, mdiTargetVariant,
   mdiUndo,
 } from "@mdi/js";
 import { memo, type ReactNode } from "react";
@@ -19,17 +19,27 @@ export const Controls = memo(function Controls({
   onResetLesson,
   onSkipLesson,
   onHelp,
+  onCalibrate,
 }: {
   readonly onChangeView: () => void;
   readonly onResetLesson: () => void;
   readonly onSkipLesson: () => void;
   readonly onHelp: () => void;
+  readonly onCalibrate: () => void;
 }): ReactNode {
   const { formatMessage } = useIntl();
   const { settings } = useSettings();
   const { setView } = useView(views);
   return (
     <div id={names.controls} className={styles.controls}>
+      <IconButton
+        icon={<Icon shape={mdiTargetVariant} />}
+        title={formatMessage({
+          id: "practice.widget.calibrate.description",
+          defaultMessage: "Calibrate the keys coordinates.",
+        })}
+        onClick={onHelp}
+      />
       <IconButton
         icon={<Icon shape={mdiHelpCircleOutline} />}
         title={formatMessage({

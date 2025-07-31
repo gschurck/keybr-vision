@@ -16,11 +16,11 @@ import { Indicators } from "./Indicators.tsx";
 import { DeferredKeyboardPresenter } from "./KeyboardPresenter.tsx";
 import { PracticeTour } from "./PracticeTour.tsx";
 import * as styles from "./Presenter.module.less";
-import { type LessonState } from "./state/index.ts";
+import {type CalibrationState, type LessonState} from "./state/index.ts";
 import {WebcamFeed} from "./WebcamFeed.tsx";
 
 type Props = {
-  readonly state: LessonState;
+  readonly state: LessonState | CalibrationState;
   readonly lines: LineList;
   readonly depressedKeys: readonly KeyId[];
   readonly onResetLesson: () => void;
@@ -87,6 +87,7 @@ export class Presenter extends PureComponent<Props, State> {
       handleChangeView,
       handleHelp,
       handleTourClose,
+      handleCalibrate,
     } = this;
     switch (view) {
       case View.Normal:
@@ -102,6 +103,7 @@ export class Presenter extends PureComponent<Props, State> {
                 onResetLesson={handleResetLesson}
                 onSkipLesson={handleSkipLesson}
                 onHelp={handleHelp}
+                onCalibrate={handleCalibrate}
               />
             }
             textInput={
@@ -136,6 +138,7 @@ export class Presenter extends PureComponent<Props, State> {
                 onResetLesson={handleResetLesson}
                 onSkipLesson={handleSkipLesson}
                 onHelp={handleHelp}
+                onCalibrate={handleCalibrate}
               />
             }
             textInput={
@@ -168,6 +171,7 @@ export class Presenter extends PureComponent<Props, State> {
                 onResetLesson={handleResetLesson}
                 onSkipLesson={handleSkipLesson}
                 onHelp={handleHelp}
+                onCalibrate={handleCalibrate}
               />
             }
             textInput={
@@ -279,6 +283,10 @@ export class Presenter extends PureComponent<Props, State> {
         this.focusRef.current?.focus();
       },
     );
+  };
+
+  handleCalibrate = () => {
+    this.props.state.resetLesson();
   };
 }
 

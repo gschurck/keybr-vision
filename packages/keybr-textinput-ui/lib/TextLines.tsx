@@ -133,7 +133,7 @@ const TextItem = memo(
     chars,
   }: {
     readonly settings: TextDisplaySettings;
-    readonly chars: readonly Char[];
+    readonly chars: readonly Char[];D
   }): ReactNode {
     return <span style={textItemStyle}>{renderChars(settings, chars)}</span>;
   },

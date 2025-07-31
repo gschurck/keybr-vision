@@ -1,4 +1,5 @@
 import { filterText } from "@keybr/keyboard";
+
 import { type CodePoint } from "@keybr/unicode";
 import {
   Attr,
@@ -9,6 +10,8 @@ import {
   type StyledText,
 } from "./chars.ts";
 import { type TextInputSettings } from "./settings.ts";
+import {keysCoordinates} from "@keybr/vision";
+
 
 export enum Feedback {
   Succeeded,
@@ -36,7 +39,7 @@ export class TextInput {
   readonly onStep: StepListener;
   readonly #text: string;
   readonly #chars: readonly Char[];
-  #steps: (Step & { readonly char: Char })[] = [];
+  _steps: (Step & { readonly char: Char })[] = [];
   #garbage: (Step & { readonly char: Char })[] = [];
   #typo!: boolean;
   #output!: { chars: Char[]; lines: LineList; remaining: Char[] };
@@ -57,7 +60,7 @@ export class TextInput {
   }
 
   reset(): void {
-    this.#steps = [];
+    this._steps = [];
     this.#garbage = [];
     this.#typo = false;
     this.#update();
@@ -72,7 +75,7 @@ export class TextInput {
   }
 
   get pos(): number {
-    return this.#steps.length;
+    return this._steps.length;
   }
 
   get completed(): boolean {
@@ -80,7 +83,7 @@ export class TextInput {
   }
 
   get steps(): readonly Step[] {
-    return this.#steps;
+    return this._steps;
   }
 
   get chars(): readonly Char[] {
@@ -131,7 +134,7 @@ export class TextInput {
   clearWord(): Feedback {
     this.#garbage = [];
     while (this.pos > 0 && this.at(this.pos - 1).codePoint !== 0x0020) {
-      this.#steps.pop();
+      this._steps.pop();
     }
     this.#typo = true;
     return this.#return(Feedback.Succeeded);
@@ -168,7 +171,7 @@ export class TextInput {
       (this.forgiveErrors || this.#garbage.length === 0)
     ) {
       const typo = this.#typo;
-      this.#addStep(
+      this.addStep(
         {
           timeStamp,
           codePoint,
@@ -177,6 +180,7 @@ export class TextInput {
         },
         this.at(this.pos),
       );
+      keysCoordinates[codePoint] = { x: 0, y: 0 };
       this.#garbage = [];
       this.#typo = false;
       if (typo) {
@@ -221,7 +225,7 @@ export class TextInput {
     const text = this.#text;
     const remaining = this.#chars.slice(this.pos);
     const chars = [];
-    chars.push(...this.#steps.map(({ char }) => char));
+    chars.push(...this._steps.map(({ char }) => char));
     if (!this.stopOnError) {
       chars.push(...this.#garbage.map(({ char }) => char));
     }
@@ -233,16 +237,17 @@ export class TextInput {
     this.#output = { chars, lines, remaining };
   }
 
-  #addStep(step: Step, char: Char): void {
+  addStep(step: Step, char: Char): void {
+    console.log("Adding step:", step, "at position:", this.pos);
     const attrs = step.typo ? Attr.Miss : Attr.Hit;
-    this.#steps.push({ ...step, char: { ...char, attrs } });
+    this._steps.push({ ...step, char: { ...char, attrs } });
     this.onStep(step);
   }
 
   #skipWord(timeStamp: number): void {
     // Skip the remaining non-space characters inside the word.
     while (this.pos < this.length && this.at(this.pos).codePoint !== 0x0020) {
-      this.#addStep(
+      this.addStep(
         {
           timeStamp,
           codePoint: this.at(this.pos).codePoint,
@@ -254,7 +259,7 @@ export class TextInput {
     }
     // Skip the space character to position at the beginning of the next word.
     if (this.pos < this.length && this.at(this.pos).codePoint === 0x0020) {
-      this.#addStep(
+      this.addStep(
         {
           timeStamp,
           codePoint: this.at(this.pos).codePoint,
@@ -290,7 +295,7 @@ export class TextInput {
     }
 
     // Append a step with an error.
-    this.#addStep(
+    this.addStep(
       {
         timeStamp: this.#garbage[0].timeStamp,
         codePoint: this.at(this.pos).codePoint,
@@ -302,7 +307,7 @@ export class TextInput {
 
     // Append successful steps.
     for (let i = 1; i < this.#garbage.length; i++) {
-      this.#addStep(this.#garbage[i], this.#garbage[i].char);
+      this.addStep(this.#garbage[i], this.#garbage[i].char);
     }
 
     this.#garbage = [];
@@ -332,7 +337,7 @@ export class TextInput {
     }
 
     // Append a step with an error.
-    this.#addStep(
+    this.addStep(
       {
         timeStamp: this.#garbage[0].timeStamp,
         codePoint: this.at(this.pos).codePoint,
@@ -344,7 +349,7 @@ export class TextInput {
 
     // Append successful steps.
     for (let i = 0; i < this.#garbage.length; i++) {
-      this.#addStep(this.#garbage[i], this.#garbage[i].char);
+      this.addStep(this.#garbage[i], this.#garbage[i].char);
     }
 
     this.#garbage = [];

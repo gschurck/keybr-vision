@@ -5,7 +5,7 @@ import {
   mdiHelpCircleOutline,
   mdiKeyboard,
   mdiKeyboardOutline,
-  mdiSpeedometer,
+  mdiSpeedometer, mdiTargetVariant,
   mdiTrophyOutline,
 } from "@mdi/js";
 import { defineMessage, type MessageDescriptor } from "react-intl";
@@ -60,6 +60,38 @@ export namespace Pages {
     },
     meta: [{ name: "robots", content: "noindex" }],
   } satisfies PageInfo;
+
+  export const calibrate = {
+    path: "/calibrate",
+    title: defineMessage({
+      id: "t_Calibrate",
+      defaultMessage: "Calibrate",
+    }),
+    link: {
+      label: defineMessage({
+        id: "t_Calibrate",
+        defaultMessage: "Calibrate",
+      }),
+      title: defineMessage({
+        id: "page.calibrate.description",
+        defaultMessage:
+          "Calibrate",
+      }),
+      icon: mdiTargetVariant,
+    },
+    meta: [
+      ...meta,
+      {
+        name: "description",
+        content: defineMessage({
+          id: "page.calibrate.description",
+          defaultMessage:
+            "Calibrate",
+        }),
+      },
+    ],
+  } satisfies PageInfo;
+
 
   export const practice = {
     path: "/",

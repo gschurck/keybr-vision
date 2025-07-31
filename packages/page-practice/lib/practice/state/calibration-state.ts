@@ -13,12 +13,13 @@ import {
 } from "@keybr/result";
 import { type Settings } from "@keybr/settings";
 import {
+  CalibrationTextInput,
   type Feedback,
   type LineList,
   makeStats,
   type StyledText,
   type TextDisplaySettings,
-  TextInput,
+  type TextInput,
   type TextInputSettings,
   toTextDisplaySettings,
   toTextInputSettings,
@@ -28,7 +29,8 @@ import { type CodePoint } from "@keybr/unicode";
 import { type LastLesson } from "./last-lesson.ts";
 import { type Progress } from "./progress.ts";
 
-export class LessonState {
+
+export class CalibrationState {
   readonly #onResult: (result: Result, textInput: TextInput) => void;
   readonly settings: Settings;
   readonly lesson: Lesson;
@@ -62,6 +64,7 @@ export class LessonState {
     this.dailyGoal = progress.dailyGoal.copy();
     this.lessonKeys = this.lesson.update(this.keyStatsMap);
     const alphabet = "abcdefghijklmnopqrstuvwxyz"
+
     this.#reset(alphabet);
   }
 
@@ -77,14 +80,20 @@ export class LessonState {
     const feedback = this.textInput.onInput(event);
     this.lines = this.textInput.lines;
     this.suffix = this.textInput.remaining.map(({ codePoint }) => codePoint);
+    console.log("Input event:", event);
+    console.log("Letter:", String.fromCharCode(event.codePoint));
+    console.log("suffix:", this.suffix);
     if (this.textInput.completed) {
+      console.log("Calibration completed");
+      console.log("Text input:", this.textInput.text);
       this.#onResult(this.#makeResult(), this.textInput);
     }
     return feedback;
   }
 
   #reset(fragment: StyledText) {
-    this.textInput = new TextInput(fragment, this.textInputSettings);
+    // this.textInput = new TextInput(fragment, this.textInputSettings);
+    this.textInput = new CalibrationTextInput(fragment, this.textInputSettings);
     this.lines = this.textInput.lines;
     this.suffix = this.textInput.remaining.map(({ codePoint }) => codePoint);
   }
@@ -98,4 +107,3 @@ export class LessonState {
     );
   }
 }
-

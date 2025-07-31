@@ -12,6 +12,7 @@ const detectorConfig = {
   runtime: "mediapipe", // or 'tfjs',
   solutionPath: "https://cdn.jsdelivr.net/npm/@mediapipe/hands",
   modelType: "full",
+  maxHands: 2
 };
 
 // Initialize the detector and load the image when the module loads.

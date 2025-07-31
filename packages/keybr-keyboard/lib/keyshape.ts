@@ -6,6 +6,7 @@ import {
   type LabelShape,
   type ZoneId,
 } from "./types.ts";
+import {keyFingerBindings} from "@keybr/vision";
 
 export class KeyShape {
   static readonly fingerZones: readonly ZoneId[] = [
@@ -78,8 +79,17 @@ export class KeyShape {
     this.c = c ?? null;
     this.d = d ?? null;
     this.finger = selectZone(KeyShape.fingerZones, this.zones);
+    // this.hand = selectZone(KeyShape.handZones, this.zones);
     this.hand = selectZone(KeyShape.handZones, this.zones);
     this.row = selectZone(KeyShape.rowZones, this.zones);
+    console.log(
+      `KeyShape: ${this.id} zones=${this.zones.join(", ")} finger=${this.finger} hand=${this.hand} row=${this.row}`,
+    );
+    keyFingerBindings[this.id.slice(-1)] = {
+      finger: this.finger,
+      hand: this.hand,
+    }
+    console.log(keyFingerBindings)
   }
 
   inZone(id: ZoneId): boolean {
